@@ -1,0 +1,255 @@
+﻿@* @{
+    ViewData["Title"] = "Privacy Policy";
+}
+<h1>@ViewData["Title"]</h1>
+
+<p>Use this page to detail your site's privacy policy.</p>
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Header Viewer</title>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+
+            // var startTime = performance.now();
+
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', window.location.href, true);
+
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+
+                    // var endTime = performance.now();
+                    // var timeTaken = endTime - startTime;
+
+
+                    var headers = xhr.getAllResponseHeaders();
+                    var headerArray = headers.trim().split(/[\r\n]+/);
+                    var headerMap = {};
+
+                    headerArray.forEach(function (line) {
+                        var parts = line.split(': ');
+                        var header = parts.shift();
+                        var value = parts.join(': ');
+                        headerMap[header] = value;
+                    });
+
+                    // console.log("Headers received:", headerMap);
+
+                    var table = document.createElement('table');
+                    table.classList.add('header-table');
+
+
+
+                    var headerRow = document.createElement('tr');
+                    headerRow.innerHTML = '<th>Header</th><th>Value</th>';
+                    table.appendChild(headerRow);
+
+
+
+                    // var timeRow = document.createElement('tr');
+                    // var timeHeaderCell = document.createElement('th');
+                    // timeHeaderCell.textContent = 'Time (ms)';
+                    // var timeValueCell = document.createElement('td');
+                    // timeValueCell.textContent = timeTaken.toFixed(2); // Show time with 2 decimal places
+                    // timeRow.appendChild(timeHeaderCell);
+                    // timeRow.appendChild(timeValueCell);
+                    // table.appendChild(timeRow);
+
+
+
+                    for (var key in headerMap) {
+                        if (headerMap.hasOwnProperty(key)) {
+                            var row = document.createElement('tr');
+                            var cellKey = document.createElement('td');
+                            var cellValue = document.createElement('td');
+                            cellKey.textContent = key;
+                            cellValue.textContent = headerMap[key];
+                            row.appendChild(cellKey);
+                            row.appendChild(cellValue);
+                            table.appendChild(row);
+                        }
+                    }
+
+                    document.getElementById('headerTableContainer').appendChild(table);
+                }
+            };
+
+            xhr.send(null);
+        });
+    </script>
+    <style>
+        .header-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+            .header-table th, .header-table td {
+                border: 1px solid #ddd;
+                padding: 8px;
+            }
+
+            .header-table th {
+                background-color: #f2f2f2;
+            }
+    </style>
+</head>
+<body>
+    <h2>HTTP Headers</h2>
+    <div id="headerTableContainer"></div>
+</body>
+</html> *@
+
+
+
+
+
+
+
+
+
+
+
+@{
+    ViewData["Title"] = "[FromForm]";
+}
+<h1>@ViewData["Title"]</h1>
+
+
+<div class="row">
+    <div class="col-6">
+        <div id="headerContainer">
+            <table id="headerTable" class="table">
+                <thead>
+                    <tr>
+                        <th>Header Name</th>
+                        <th>Header Value</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+    <div class="col-6">
+        <div class="container">
+            <h2 class="mt-3">Add Book</h2>
+            <form id="addBookForm" class="mt-3" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="title">Title:</label>
+                    <input type="text" class="form-control" id="title" name="title" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="isbn">ISBN:</label>
+                    <input type="text" class="form-control" id="isbn" name="isbn" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="price">Price:</label>
+                    <input type="number" class="form-control" id="price" name="price" required>
+                </div>
+                <br />
+                <button type="submit" class="btn btn-outline-primary">Add Book</button>
+                <a href="/Home/Index" class="btn btn-outline-dark float-end">Go Back</a>
+            </form>
+        </div>
+
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.0.1/js/bootstrap.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    $(document).ready(function(){
+        
+        $('#addBookForm').submit(function (event){
+            event.preventDefault();
+
+            var formdata = new FormData(this);
+            
+            $.ajax({
+                type: 'POST',
+                url: '/Home/SaveBookFromForm',
+                data: formdata,
+               // contentType: 'multipart/form-data',
+                processData: false,
+                contentType: false,
+
+
+
+                
+
+                success: function (response, status, xhr) {
+                    var data;
+                    try {
+                        data = (typeof response === 'string') ? JSON.parse(response) : response;
+                    } catch (e) {
+                        alert('An error occurred while parsing the response.');
+                        return;
+                    }
+                   
+                    if (data.success) {
+                        var newRow = '<tr><td>' + title + '</td><td>' + isbn + '</td><td>' + price + '</td></tr>';
+                        $('#bookTable tbody').append(newRow);
+
+                        ShowContextResponse(xhr);
+
+                        $('#title').val('');
+                        $('#isbn').val('');
+                        $('#price').val('');
+                    } else {
+                        alert('Book not added. Please check the form data.');
+                    }
+                },
+
+                
+                // success: function (response, status, xhr) {
+                //     debugger;
+                //     if (response.success) {
+                //         var newRow = '<tr><td>' + title + '</td><td>' + isbn + '</td><td>' + price + '</td></tr>';
+                //         $('#bookTable tbody').append(newRow);
+                //         window.location.href = '/Home/Index';
+                //         ShowContextResponse(xhr);
+
+                //         $('#title').val('');
+                //         $('#isbn').val('');
+                //         $('#price').val('');
+                //     }
+                //     else {
+                //         alert('Book not added. Please check the form data.');
+                //     }
+                // },
+                // error: function (error) {
+                //     alert('An error occurred while adding the book.');
+                // }
+            });
+        });
+        function ShowContextResponse(xhr) {
+            var tableBody = $('#headerTable tbody');
+            tableBody.empty();
+            var customHeaders = [
+                'Action-Name',
+                'HTTP-Method',
+                'HTTP-Scheme',
+                'Host',
+                'Port',
+                'Execution-Time',
+                'Server-DateTime'
+            ];
+
+            customHeaders.forEach(function (headerName) {
+                var headerValue = xhr.getResponseHeader(headerName);
+
+                if (headerValue) {
+                    var newRow = '<tr><td>' + headerName + '</td><td>' + headerValue + '</td></tr>';
+                    tableBody.append(newRow);
+                }
+            });
+        }
+
+
+    });
+</script>

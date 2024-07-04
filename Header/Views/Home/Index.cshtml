@@ -1,0 +1,522 @@
+﻿@*  <!DOCTYPE html>
+ <html>
+ <head>
+     <title>Header Viewer</title>
+    
+
+
+     <script>
+        
+         document.addEventListener("DOMContentLoaded", function () {
+             var startTime = performance.now();
+             var xhr = new XMLHttpRequest();
+             xhr.open('GET', window.location.href, true);
+
+             xhr.onreadystatechange = function () {
+                 if (xhr.readyState == 4 && xhr.status == 200) {
+                     var endTime = performance.now();
+                     var headers = xhr.getAllResponseHeaders();
+                     var headerArray = headers.trim().split(/[\r\n]+/);
+                     var headerMap = {};
+
+                     headerArray.forEach(function (line) {
+                         var parts = line.split(': ');
+                         var header = parts.shift();
+                         var value = parts.join(': ');
+                         headerMap[header] = value;
+                     });
+
+                     console.log("Headers received:", headerMap); 
+
+                     var table = document.createElement('table');
+                     table.classList.add('header-table');
+                     var headerRow = document.createElement('tr');
+                     headerRow.innerHTML = '<th>Header</th><th>Value</th>';
+                     table.appendChild(headerRow);
+
+                     for (var key in headerMap) {
+                         if (headerMap.hasOwnProperty(key)) {
+                             var row = document.createElement('tr');
+                             var cellKey = document.createElement('td');
+                             var cellValue = document.createElement('td');
+                             cellKey.textContent = key;
+                             cellValue.textContent = headerMap[key];
+                             row.appendChild(cellKey);
+                             row.appendChild(cellValue);
+                             table.appendChild(row);
+                         }
+                     }
+
+                     document.getElementById('headerTableContainer').appendChild(table);
+                 }
+             };
+
+             xhr.send(null);
+         });
+        
+     </script>
+     <style>
+         .header-table {
+             width: 100%;
+             border-collapse: collapse;
+         }
+
+             .header-table th, .header-table td {
+                 border: 1px solid #ddd;
+                 padding: 8px;
+             }
+
+             .header-table th {
+                 background-color: #f2f2f2;
+             }
+     </style>
+ </head>
+ <body>
+     <h2>HTTP Headers</h2>
+     <div id="headerTableContainer"></div>
+ </body>
+ </html>
+ *@
+@* 
+@{
+    ViewData["Tilte"] = "Headers";
+}
+
+ <style>
+     .is-invalid{
+         border-color:brown
+     }
+     .invalid-feedback{
+         color:#dc3545
+     }
+
+ </style>
+
+ <script> 
+     $(document).ready(function () {
+         function fetchDataFromSource(method) {
+             var methodtocall = method;
+         }
+     })
+ </script>
+
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Header Viewer</title>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+
+            // var startTime = performance.now(); 
+
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', window.location.href, true);
+
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+
+                    // var endTime = performance.now(); 
+                    // var timeTaken = endTime - startTime; 
+                   
+
+                    var headers = xhr.getAllResponseHeaders();
+                    var headerArray = headers.trim().split(/[\r\n]+/);
+                    var headerMap = {};
+
+                    headerArray.forEach(function (line) {
+                        var parts = line.split(': ');
+                        var header = parts.shift();
+                        var value = parts.join(': ');
+                        headerMap[header] = value;
+                    });
+
+                   // console.log("Headers received:", headerMap);
+
+                    var table = document.createElement('table');
+                    table.classList.add('header-table');
+
+
+                    
+                    var headerRow = document.createElement('tr');
+                    headerRow.innerHTML = '<th>Header</th><th>Value</th>';
+                    table.appendChild(headerRow);
+
+
+                    
+                    // var timeRow = document.createElement('tr');
+                    // var timeHeaderCell = document.createElement('th');
+                    // timeHeaderCell.textContent = 'Time (ms)';
+                    // var timeValueCell = document.createElement('td');
+                    // timeValueCell.textContent = timeTaken.toFixed(2); // Show time with 2 decimal places
+                    // timeRow.appendChild(timeHeaderCell);
+                    // timeRow.appendChild(timeValueCell);
+                    // table.appendChild(timeRow);
+
+                    
+                    
+                    for (var key in headerMap) {
+                        if (headerMap.hasOwnProperty(key)) {
+                            var row = document.createElement('tr');
+                            var cellKey = document.createElement('td');
+                            var cellValue = document.createElement('td');
+                            cellKey.textContent = key;
+                            cellValue.textContent = headerMap[key];
+                            row.appendChild(cellKey);
+                            row.appendChild(cellValue);
+                            table.appendChild(row);
+                        }
+                    }
+
+                    document.getElementById('headerTableContainer').appendChild(table);
+                }
+            };
+
+            xhr.send(null);
+        });
+    </script>
+    <style>
+        .header-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+            .header-table th, .header-table td {
+                border: 1px solid #ddd;
+                padding: 8px;
+            }
+
+            .header-table th {
+                background-color: #f2f2f2;
+            }
+    </style>
+</head>
+<body>
+    <h2>HTTP Headers</h2>
+    <div id="headerTableContainer"></div>
+</body>
+</html> *@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@{
+    ViewData["Title"] = "Interceptor Filter";
+}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.0.1/css/bootstrap.min.css" />
+<style>
+    .is-invalid {
+        border-color: #dc3545;
+    }
+
+    .invalid-feedback {
+        color: #dc3545;
+    }
+</style>
+
+
+
+<div class="row">
+    <div class="col-6">
+        <input type="number" id="dataInput" placeholder="Enter Book Id" class="form-control" />
+        <span class="invalid-feedback" id="error-message"></span>
+    </div>
+    <br />
+    <div class="col-6">
+        <div class="d-flex justify-content-center align-items-lg-center">
+            <button id="btngetData" class="btn btn-primary">Get All Book</button> &nbsp;|&nbsp;
+            <button id="btngetBook" class="btn btn-warning">Get Book By AuthorID</button>&nbsp;|&nbsp;
+            <button id="btnDeleteBook" class="btn btn-info">Delete Book</button>
+            <br />
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-6">
+        <div id="headerContainer">
+            <table id="headerTable" class="table">
+                <thead>
+                    <tr>
+                        <th>Header Name</th>
+                        <th>Header Value</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+    <div class="col-6">
+        <div class="container">
+            <h2 class="mt-3">Add Book</h2>
+            <form id="addBookForm" class="mt-3">
+                <div class="form-group">
+                    <label for="title">Title:</label>
+                    <input type="text" class="form-control" id="title" name="title" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="isbn">ISBN:</label>
+                    <input type="text" class="form-control" id="isbn" name="isbn" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="price">Price:</label>
+                    <input type="number" class="form-control" id="price" name="price" required>
+                </div>
+                <br />
+                <button type="submit" class="btn btn-secondary">Add Book</button>
+                <a href="/Home/Privacy" class="btn btn-outline-dark float-end">Submit with FromForm</a>
+            </form>
+        </div>
+
+    </div>
+</div>
+<hr />
+<table id="bookTable" class="table">
+    <thead>
+        <tr>
+            <th>Book ID</th>
+            <th>Title</th>
+            <th>ISBN</th>
+            <th>Price</th>
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+<br />
+<br />
+<br />
+<br />
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.0.1/js/bootstrap.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+
+        function fetchDataFromSource(method) {
+            var methodtocall = method;
+            
+            $.ajax({
+                url: '/Home/' + methodtocall,
+                type: 'GET',
+                success: function (data, status, xhr) {
+                    
+                    
+                    ShowContextResponse(xhr);
+                    var bookTableBody = $('#bookTable tbody');
+                    bookTableBody.empty();
+                    data = JSON.parse(data);
+                    data.forEach(function (book) {
+                       
+                        var newRow = '<tr><td>' + book.bookId + '</td><td>' + book.title + '</td><td>' + book.isbn + '</td><td>' + book.price + '</td></tr>';
+                        bookTableBody.append(newRow);
+                    });
+                    
+                }
+            });
+        }
+        function ShowContextResponse(xhr) {
+            var tableBody = $('#headerTable tbody');
+            tableBody.empty();
+            var customHeaders = [
+                'Action-Name',
+                'HTTP-Method',
+                'HTTP-Scheme',
+                'Host',
+                'Port',
+                'Execution-Time',
+                'Server-DateTime'
+            ];
+
+            // Loop through the custom headers and populate the table
+            customHeaders.forEach(function (headerName) {
+                var headerValue = xhr.getResponseHeader(headerName);
+
+                if (headerValue) {
+                    var newRow = '<tr><td>' + headerName + '</td><td>' + headerValue + '</td></tr>';
+                    tableBody.append(newRow);
+                }
+            });
+        }
+
+        function checkifinputisEmpty(id) {
+
+            var errorMessageElement = $('#error-message');
+            if (id === '') {
+                errorMessageElement.text('ID cannot be empty');
+                $('#dataInput').addClass('is-invalid');
+                return;
+            }
+            errorMessageElement.text('');
+            $('#dataInput').removeClass('is-invalid');
+        }
+        $('#btngetData').click(function (e) {
+            e.preventDefault();
+            fetchDataFromSource("GetAllBooks");
+        });
+
+        $('#btngetBook').click(function (e) {
+            e.preventDefault();
+            var id = $('#dataInput').val();
+            if (id === '') {
+                checkifinputisEmpty(id);
+                return;
+            }
+
+            fetchDataFromSource("getBookByAuthorId?authorId=" + id);
+        });
+
+        $('#btnDeleteBook').click(function (e) {
+            e.preventDefault();
+            var id = $('#dataInput').val();
+            if (id === '') {
+                checkifinputisEmpty(id);
+                return;
+            }
+            debugger;
+            $.ajax({
+                type: 'DELETE',
+                url: '/Home/DeleteBookByAuthorId/' + id,
+                
+                success: function (response, status, xhr) {
+                    debugger;
+                    var data;
+                    try {
+                        data = (typeof response === 'string') ? JSON.parse(response) : response;
+                    } catch (e) {
+                        alert('An error occurred while parsing the response.');
+                        return;
+                    }
+
+                    if (data.success) {
+                       // alert(response.message);
+                        ShowContextResponse(xhr);
+                        fetchDataFromSource("GetAllBooks");
+                    } else {
+                        alert(response.message);
+                    }
+                },
+                error: function (error) {
+                    alert('An error occurred while deleting the book.');
+                }
+            });
+        });
+        $('#addBookForm').submit(function (event) {
+            event.preventDefault(); // stop reload on click or reload ...
+
+            var title = $('#title').val();
+            var isbn = $('#isbn').val();
+            var price = parseFloat($('#price').val());
+
+            if (title && isbn && price) {
+                var data = {
+                    Title: title,
+                    ISBN: isbn,
+                    Price: price,
+                    AuthorId: 1
+                };
+                //debugger;
+                $.ajax({
+                    type: 'POST',
+                    url: '/Home/SaveBook',
+                    data: JSON.stringify(data),
+                    contentType: 'application/json; charset=utf-8',
+
+
+
+
+                    success: function (response, status, xhr) {
+                        var data;
+                        try {
+                            data = (typeof response === 'string') ? JSON.parse(response) : response;
+                        } catch (e) {
+                            alert('An error occurred while parsing the response.');
+                            return;
+                        }
+
+                        if (data.success) {
+                            var newRow = '<tr><td>' + title + '</td><td>' + isbn + '</td><td>' + price + '</td></tr>';
+                            $('#bookTable tbody').append(newRow);
+
+                            ShowContextResponse(xhr);
+
+                            $('#title').val('');
+                            $('#isbn').val('');
+                            $('#price').val('');
+                        } else {
+                            alert('Book not added. Please check the form data.');
+                        }
+                    }
+
+
+
+
+
+
+
+
+
+
+
+
+                    // success: function (response, status, xhr) {
+                    //     debugger; // Use this to inspect the response object
+                    //     if (response.success) {
+                    //         var newRow = '<tr><td>' + title + '</td><td>' + isbn + '</td><td>' + price + '</td></tr>';
+                    //         $('#bookTable tbody').append(newRow);
+
+                    //         ShowContextResponse(xhr);
+
+                    //         $('#title').val('');
+                    //         $('#isbn').val('');
+                    //         $('#price').val('');
+                    //     } else {
+                    //         alert('Book not added. Please check the form data.');
+                    //     }
+                    // },
+                    // error: function (error) {
+                    //     alert('An error occurred while adding the book.');
+                    // }
+                });
+
+            } else {
+                alert('Please fill in all fields.');
+            }
+        });
+
+    });
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
